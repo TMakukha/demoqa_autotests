@@ -1,5 +1,7 @@
+import random
+
 import allure
-from pages.elements_page import TextBoxPage, CheckBoxPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
 
 
 @allure.suite("Elements")
@@ -30,3 +32,22 @@ class TestElements:
             input_checkbox = checkbox_page.get_list_checked_checkboxes()
             output_checkbox = checkbox_page.get_output_result()
             assert input_checkbox == output_checkbox, "Checkboxes wasn't selected"
+
+    @allure.feature('Radio button')
+    class TestRadioButtons:
+
+        @allure.title('Check radio buttons')
+        def test_radio_buttons(self, driver):
+            radio_button_page = RadioButtonPage(driver, 'https://demoqa.com/radio-button')
+            radio_button_page.open()
+            radio_button_page.click_on_radio_button("yes")
+            output_yes = radio_button_page.get_output_result()
+            radio_button_page.click_on_radio_button('impressive')
+            output_impressive = radio_button_page.get_output_result()
+            radio_button_page.click_on_radio_button('no')
+            output_no = radio_button_page.get_output_result()
+            assert output_yes == 'Yes', "'YES' wasn't selected"
+            assert output_impressive == 'Impressive', "'Impressive' wasn't selected"
+            assert output_no == 'No', "'No' wasn't selected"
+
+
