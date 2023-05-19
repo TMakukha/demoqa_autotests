@@ -1,12 +1,13 @@
 import allure
 import random
 
+import requests
 from selenium.webdriver.common.by import By
 
 from pages.base_page import BasePage
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators, ButtonsPageLocators
+    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators
 
 
 class TextBoxPage(BasePage):
@@ -189,3 +190,28 @@ class ButtonsPage(BasePage):
         if click_type == 'click':
             self.element_is_visible(self.locators.CLICK_BUTTON).click()
             return self.check_click_type(self.locators.SUCCESS_CLICK)
+
+
+class LinksPage(BasePage):
+    locators = LinksPageLocators
+
+    @allure.step('Check new tab links')
+    def check_new_tab_link(self):
+        link = self.element_is_visible(self.locators.LINK)
+        link_href = link.get_attribute('href')
+        request = requests.get(link_href)
+        if request.status_code == 200:
+            link.click()
+            self.driver.switch_to.window(self.driver.window_handles[1])
+            url = self.driver.current_url
+            return link_href, url
+        else:
+            return link_href, request.status_code
+
+    @allure.step('Check bad request link')
+    def check_bad_request_link(self, url):
+        request = requests.get(url)
+        if request.status_code == 200:
+            self.element_is_present(self.locators.BAD_REQUEST).click()
+        else:
+            return request.status_code
