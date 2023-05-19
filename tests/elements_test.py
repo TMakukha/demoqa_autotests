@@ -1,5 +1,5 @@
 import allure
-from pages.elements_page import TextBoxPage
+from pages.elements_page import TextBoxPage, CheckBoxPage
 
 
 @allure.suite("Elements")
@@ -18,3 +18,15 @@ class TestElements:
             assert current_address == output_cur_addr, "the current address does not match"
             assert permanent_address == output_per_addr, "the permanent address does not match"
 
+    @allure.feature('CheckBox')
+    class TestCheckBox:
+
+        @allure.title('Check CheckBox')
+        def test_checkbox(self, driver):
+            checkbox_page = CheckBoxPage(driver, 'https://demoqa.com/checkbox')
+            checkbox_page.open()
+            checkbox_page.open_full_list()
+            checkbox_page.click_random_checkbox()
+            input_checkbox = checkbox_page.get_list_checked_checkboxes()
+            output_checkbox = checkbox_page.get_output_result()
+            assert input_checkbox == output_checkbox, "Checkboxes wasn't selected"
