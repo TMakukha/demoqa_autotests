@@ -54,7 +54,7 @@ class TestElements:
     class TestWebTable:
 
         @allure.title('Add a new person to web table')
-        def test_webtable_add_new_person(self, driver):
+        def test_web_table_add_new_person(self, driver):
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
             web_table_page.open()
             new_person = web_table_page.add_new_person()
