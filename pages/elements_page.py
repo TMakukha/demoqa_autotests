@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 from generator.generator import generated_person
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators
+    WebTablePageLocators, ButtonsPageLocators
 
 
 class TextBoxPage(BasePage):
@@ -170,3 +170,22 @@ class WebTablePage(BasePage):
             data.append(self.check_rows_count())
         return data
 
+
+class ButtonsPage(BasePage):
+    locators = ButtonsPageLocators
+
+    @allure.step('Check type of click')
+    def check_click_type(self, element):
+        return self.element_is_present(element).text
+
+    @allure.step('Click on different type buttons')
+    def click_on_dif_buttons(self, click_type):
+        if click_type == 'double':
+            self.action_double_click(self.element_is_visible(self.locators.DOUBLE_CLICK_BUTTON))
+            return self.check_click_type(self.locators.SUCCESS_DOUBLE_CLICK)
+        if click_type == 'right':
+            self.action_right_click(self.element_is_visible(self.locators.RIGHT_CLICK_BUTTON))
+            return self.check_click_type(self.locators.SUCCESS_RIGHT_CLICK)
+        if click_type == 'click':
+            self.element_is_visible(self.locators.CLICK_BUTTON).click()
+            return self.check_click_type(self.locators.SUCCESS_CLICK)

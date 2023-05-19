@@ -1,7 +1,7 @@
 import random
 
 import allure
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage
 
 
 @allure.suite("Elements")
@@ -98,3 +98,17 @@ class TestElements:
             count = web_table_page.select_some_rows()
             assert count == [5, 10, 20, 25, 50,
                              100], 'The number of rows in the table has not been changed or has changed incorrectly'
+
+    @allure.feature('Test buttons')
+    class TestButtons:
+
+        @allure.title('Check different clicks on the buttons')
+        def test_different_clicks_on_buttons(self, driver):
+            buttons_page = ButtonsPage(driver, 'https://demoqa.com/buttons')
+            buttons_page.open()
+            click = buttons_page.click_on_dif_buttons('click')
+            double_click = buttons_page.click_on_dif_buttons('double')
+            right_click = buttons_page.click_on_dif_buttons('right')
+            assert click == "You have done a dynamic click", "The dynamic click button was not pressed"
+            assert double_click == "You have done a double click", "The double click button was not pressed"
+            assert right_click == "You have done a right click", "The right click button was not pressed"
