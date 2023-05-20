@@ -198,9 +198,13 @@ class ButtonsPage(BasePage):
 class LinksPage(BasePage):
     locators = LinksPageLocators
 
-    @allure.step('Check new tab links')
-    def check_new_tab_link(self):
-        link = self.element_is_visible(self.locators.LINK)
+    @allure.step('Check new tab simple link')
+    def check_new_tab_link(self, choice):
+        choices = {
+            'simple_link': self.locators.SIMPLE_LINK,
+            'dynamic_link': self.locators.DYNAMIC_LINK
+        }
+        link = self.element_is_visible(choices[choice])
         link_href = link.get_attribute('href')
         request = requests.get(link_href)
         if request.status_code == 200:
@@ -212,10 +216,19 @@ class LinksPage(BasePage):
             return link_href, request.status_code
 
     @allure.step('Check bad request link')
-    def check_bad_request_link(self, url):
+    def check_link_api_call(self, url, choice):
+        choices = {
+            'created_link': self.locators.CREATED_LINK,
+            'no_content_link': self.locators.NO_CONTENT_LINK,
+            'moved_link': self.locators.MOVED_LINK,
+            'bad_request_link': self.locators.BAD_REQUEST_LINK,
+            'unauthorized_link': self.locators.UNAUTHORIZED_LINK,
+            'forbidden_link': self.locators.FORBIDDEN_LINK,
+            'not_found_link': self.locators.NOT_FOUND_LINK
+        }
         request = requests.get(url)
         if request.status_code == 200:
-            self.element_is_present(self.locators.BAD_REQUEST).click()
+            self.element_is_present(choices[choice]).click()
         else:
             return request.status_code
 

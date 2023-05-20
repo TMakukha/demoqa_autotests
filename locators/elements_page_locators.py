@@ -69,8 +69,16 @@ class ButtonsPageLocators:
 
 
 class LinksPageLocators:
-    LINK = (By.CSS_SELECTOR, 'a[id="simpleLink"]')
-    BAD_REQUEST = (By.CSS_SELECTOR, 'a[id="bad-request"]')
+    SIMPLE_LINK = (By.CSS_SELECTOR, 'a[id="simpleLink"]')
+    DYNAMIC_LINK = (By.CSS_SELECTOR, 'a[id="dynamicLink"]')
+
+    CREATED_LINK = (By.CSS_SELECTOR, 'a[id="created"]')
+    NO_CONTENT_LINK = (By.CSS_SELECTOR, 'a[id="no-content"]')
+    MOVED_LINK = (By.CSS_SELECTOR, 'a[id="moved"]')
+    BAD_REQUEST_LINK = (By.CSS_SELECTOR, 'a[id="bad-request"]')
+    UNAUTHORIZED_LINK = (By.CSS_SELECTOR, 'a[id="unauthorized"]')
+    FORBIDDEN_LINK = (By.CSS_SELECTOR, 'a[id="forbidden"]')
+    NOT_FOUND_LINK = (By.CSS_SELECTOR, 'a[id="invalid-url"]')
 
 
 class ImageLinksPageLocators:

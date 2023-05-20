@@ -1,7 +1,8 @@
 import random
 
 import allure
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, LoadFilesPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, \
+    LoadFilesPage
 
 
 @allure.suite("Elements")
@@ -116,19 +117,68 @@ class TestElements:
 
     @allure.feature('Test links')
     class TestLinksPage:
-        @allure.title('Checking the link')
-        def test_check_link(self, driver):
+        @allure.title('Checking the simple link')
+        def test_check_simple_link(self, driver):
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
-            href_link, current_url = links_page.check_new_tab_link()
+            href_link, current_url = links_page.check_new_tab_link('simple_link')
             assert href_link == current_url, "the link is broken or url is incorrect"
 
-        @allure.title('Checking the broken link')
-        def test_broken_link(self, driver):
+        @allure.title('Checking the dynamic link')
+        def test_check_dynamic_link(self, driver):
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
-            response_code = links_page.check_bad_request_link('https://demoqa.com/bad-request')
+            href_link, current_url = links_page.check_new_tab_link('dynamic_link')
+            assert href_link == current_url, "the link is broken or url is incorrect"
+
+        @allure.title('Checking the created link')
+        def test_created_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/created', 'created_link')
+            assert response_code == 201, "the link works or the status code in son 400"
+
+        @allure.title('Checking the no content link')
+        def test_no_content_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/no-content', 'content_link')
+            assert response_code == 204, "the link works or the status code in son 400"
+
+        @allure.title('Checking the moved link')
+        def test_moved_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/moved', 'moved_link')
+            assert response_code == 301, "the link works or the status code in son 400"
+
+        @allure.title('Checking the bad request link')
+        def test_bad_request_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/bad-request', 'bad_request_link')
             assert response_code == 400, "the link works or the status code in son 400"
+
+        @allure.title('Checking the unauthorized link')
+        def test_unauthorized_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/unauthorized', 'unauthorized_link')
+            assert response_code == 401, "the link works or the status code in son 400"
+
+        @allure.title('Checking the forbidden link')
+        def test_forbidden_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/forbidden', 'forbidden_link')
+            assert response_code == 403, "the link works or the status code in son 400"
+
+        @allure.title('Checking the not found link')
+        def test_not_found_link(self, driver):
+            links_page = LinksPage(driver, 'https://demoqa.com/links')
+            links_page.open()
+            response_code = links_page.check_link_api_call('https://demoqa.com/invalid-url', 'not_found_link')
+            assert response_code == 404, "the link works or the status code in son 400"
 
     @allure.feature('Test image links')
     class TestImageLinks:
