@@ -1,3 +1,6 @@
+import base64
+import os
+
 import allure
 import random
 
@@ -5,9 +8,9 @@ import requests
 from selenium.webdriver.common.by import By
 
 from pages.base_page import BasePage
-from generator.generator import generated_person
+from generator.generator import generated_person, generated_file
 from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
-    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators
+    WebTablePageLocators, ButtonsPageLocators, LinksPageLocators, ImageLinksPageLocators, LoadFilesPageLocators
 
 
 class TextBoxPage(BasePage):
@@ -215,3 +218,36 @@ class LinksPage(BasePage):
             self.element_is_present(self.locators.BAD_REQUEST).click()
         else:
             return request.status_code
+
+
+class ImageLinksPage(BasePage):
+    locators = ImageLinksPageLocators
+
+    @allure.step('Check correct image link')
+    def check_correct_image_link(self):
+        pass
+
+
+class LoadFilesPage(BasePage):
+    locators = LoadFilesPageLocators
+
+    @allure.step('Upload file')
+    def upload_file(self):
+        file_name, path = generated_file()
+        self.element_is_present(self.locators.UPLOAD_FILE).send_keys(path)
+        os.remove(path)
+        result = self.element_is_present(self.locators.UPLOADED_RESULT).text
+        return file_name.split('/')[-1], result.split('\\')[-1]
+
+    @allure.step('Download file')
+    def download_file(self):
+        link_1 = self.element_is_present(self.locators.DOWNLOAD_FILE).get_attribute('href')
+        link_2 = base64.b64decode(link_1)
+        path = rf'/Users/timur/PycharmProjects/demoqa_autotests/test_file_{random.randint(0, 999)}.jpg'
+        with open(path, 'wb+') as f:
+            offset = link_2.find(b'\xff\xd8')
+            f.write(link_2[offset:])
+            check_file = os.path.exists(path)
+            f.close()
+        os.remove(path)
+        return check_file

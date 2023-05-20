@@ -1,4 +1,5 @@
 import random
+import datetime
 
 from data.data import Person
 from faker import Faker
@@ -22,3 +23,12 @@ def generated_person():
         permanent_address=faker_ru.address(),
         mobile=faker_ru.msisdn(),
     )
+
+
+def generated_file():
+    path = f'/Users/timur/PycharmProjects/demoqa_autotests/test_file_{datetime.date.today()}' \
+           f'.{random.choice(["txt", "pdf"])}'
+    file = open(path, 'w+')
+    file.write('HELLO AQA WORLD!')
+    file.close()
+    return file.name, path

@@ -1,7 +1,7 @@
 import random
 
 import allure
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage, ButtonsPage, LinksPage, LoadFilesPage
 
 
 @allure.suite("Elements")
@@ -94,7 +94,8 @@ class TestElements:
         def test_web_table_change_count_row(self, driver):
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
             web_table_page.open()
-            web_table_page.remove_footer()
+            # to successfully pass the test, you need to disable the footer
+            # web_table_page.remove_footer()
             count = web_table_page.select_some_rows()
             assert count == [5, 10, 20, 25, 50,
                              100], 'The number of rows in the table has not been changed or has changed incorrectly'
@@ -113,6 +114,7 @@ class TestElements:
             assert double_click == "You have done a double click", "The double click button was not pressed"
             assert right_click == "You have done a right click", "The right click button was not pressed"
 
+    @allure.feature('Test links')
     class TestLinksPage:
         @allure.title('Checking the link')
         def test_check_link(self, driver):
@@ -127,3 +129,25 @@ class TestElements:
             links_page.open()
             response_code = links_page.check_bad_request_link('https://demoqa.com/bad-request')
             assert response_code == 400, "the link works or the status code in son 400"
+
+    @allure.feature('Test image links')
+    class TestImageLinks:
+        pass
+
+    @allure.feature('Test load buttons')
+    class TestLoadButtons:
+
+        @allure.title('Uploading file check')
+        def test_upload_file(self, driver):
+            load_page = LoadFilesPage(driver, 'https://demoqa.com/upload-download')
+            load_page.open()
+            load_page.upload_file()
+            file_name, result = load_page.upload_file()
+            assert file_name == result, "The file wasn't loaded"
+
+        @allure.title('Downloading file check')
+        def test_download_file(self, driver):
+            load_page = LoadFilesPage(driver, 'https://demoqa.com/upload-download')
+            load_page.open()
+            check = load_page.download_file()
+            assert check is True, "The file wasn't downloaded"
