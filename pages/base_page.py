@@ -15,6 +15,7 @@ class BasePage:
 
     @allure.step('Find visible element')
     def element_is_visible(self, locator, timeout=2):
+        self.go_to_element(self.element_is_present(locator))
         return wait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
 
     @allure.step('Find invisible element')
@@ -44,7 +45,7 @@ class BasePage:
     @allure.step('Remove footer bug')
     def remove_footer(self):
         self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")
-        print('\nRemove Footer')
+        self.driver.execute_script("document.getElementById('fixedban').style.display = 'none'")
 
     @allure.step('Double click')
     def action_double_click(self, element):
@@ -57,7 +58,3 @@ class BasePage:
         action = ActionChains(self.driver)
         action.context_click(element)
         action.perform()
-
-    def remove_fixedban(self):
-        self.driver.execute_script("document.getElementById('fixedban').style.display = 'none'")
-        print('\nRemove Fixedban')

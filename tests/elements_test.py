@@ -96,7 +96,7 @@ class TestElements:
             web_table_page = WebTablePage(driver, 'https://demoqa.com/webtables')
             web_table_page.open()
             # to successfully pass the test, you need to disable the footer
-            # web_table_page.remove_footer()
+            web_table_page.remove_footer()
             count = web_table_page.select_some_rows()
             assert count == [5, 10, 20, 25, 50,
                              100], 'The number of rows in the table has not been changed or has changed incorrectly'
@@ -136,21 +136,21 @@ class TestElements:
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             response_code = links_page.check_link_api_call('https://demoqa.com/created', 'created_link')
-            assert response_code == 201, "the link works or the status code in son 400"
+            assert response_code == 201, "the link works or the status code in son 201"
 
         @allure.title('Checking the no content link')
         def test_no_content_link(self, driver):
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             response_code = links_page.check_link_api_call('https://demoqa.com/no-content', 'content_link')
-            assert response_code == 204, "the link works or the status code in son 400"
+            assert response_code == 204, "the link works or the status code in son 204"
 
         @allure.title('Checking the moved link')
         def test_moved_link(self, driver):
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             response_code = links_page.check_link_api_call('https://demoqa.com/moved', 'moved_link')
-            assert response_code == 301, "the link works or the status code in son 400"
+            assert response_code == 301, "the link works or the status code in son 301"
 
         @allure.title('Checking the bad request link')
         def test_bad_request_link(self, driver):
@@ -164,21 +164,21 @@ class TestElements:
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             response_code = links_page.check_link_api_call('https://demoqa.com/unauthorized', 'unauthorized_link')
-            assert response_code == 401, "the link works or the status code in son 400"
+            assert response_code == 401, "the link works or the status code in son 401"
 
         @allure.title('Checking the forbidden link')
         def test_forbidden_link(self, driver):
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             response_code = links_page.check_link_api_call('https://demoqa.com/forbidden', 'forbidden_link')
-            assert response_code == 403, "the link works or the status code in son 400"
+            assert response_code == 403, "the link works or the status code in son 403"
 
         @allure.title('Checking the not found link')
         def test_not_found_link(self, driver):
             links_page = LinksPage(driver, 'https://demoqa.com/links')
             links_page.open()
             response_code = links_page.check_link_api_call('https://demoqa.com/invalid-url', 'not_found_link')
-            assert response_code == 404, "the link works or the status code in son 400"
+            assert response_code == 404, "the link works or the status code in son 404"
 
     @allure.feature('Test image links')
     class TestImageLinks:
